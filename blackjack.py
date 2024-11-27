@@ -1,36 +1,55 @@
+import random
+import db
 
 MONEY = "money.txt"  #global variable for money.txt file
 
-def print_title():  #function for title
+suits = ["Clubs", "Spades", "Hearts", "Diamonds"]
+ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Queen", "Jack", "King", "Ace"]
+points = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
+money = []
+deck = []
+
+
+
+def createdeck():
+    global deck
+    deck = []
+    for suit in suits:
+        for i in range(len(ranks)):
+            deck.append([suit, ranks[i], points[i]])
+    random.shuffle(deck)
+    return deck
+#-----------------------------------------------------------------------------
+def card_draw():
+    return random.choice(deck)
+#-----------------------------------------------------------------------------
+def card_deal():
+    dealer = []
+    user = []
+    dealer.append(card_draw()) 
+    user.append(card_draw())
+    both = (dealer, user)
+    print(both)
+#-----------------------------------------------------------------------------
+def print_title():  #function for title_amt
     print("\nWELCOME TO ZACH AND JACOB'S BLACKJACK!")
     print("Blackjack payout is 3:2\n")
-
-def money_choice(): #function to prompt user about money at the start
-    try:
-        with open(MONEY):
-            pass
-        while True: #while loop for input
-            
-            create = int(input("1 - Start with previous balance\n2 - Start with default balance: [100]\n\t  ( 1 / 2 )\n\t      "))
-            if create == 1:                                   #---Depending on what input given, create or reuse money.txt
-                print("\nStarting with previous balance.")
-                break
-            elif create == 2:
-                print("\nStarting with default balance.")
-                with open(MONEY, "w") as file:
-                    file.write("100")
-                    break
-            else:
-                print("Invalid input.")
-    except FileNotFoundError:   #if file not found create new and give user 100 balance
-        print(f"Could not find ({MONEY}) file!")
-        print("Player starting balance: 100")
-        with open(MONEY, "w") as file:
-            file.write("100")
-
+#-----------------------------------------------------------------------------
 def main(): #call the functions
-    print_title()
-    money_choice()
-
+    print_title()    
+    db.money_choice(money, MONEY)
+    createdeck()
+    #bet_amount()
+    card_deal()
+#-----------------------------------------------------------------------------
+'''def bet_amount():    
+    while True:
+        try:
+            bet_input = int(input("Bet amount: "))
+            if bet_input < 5:
+                print("bets must be atleast 5")
+            elif bet_input > 1000:
+                print("bets must not be greater than 1000")'''
+            
 if __name__ == "__main__":
     main()
